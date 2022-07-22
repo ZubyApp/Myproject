@@ -32,7 +32,7 @@ class ContainerTest extends TestCase
          $result = $container->has($this->id);
 
          // we assert that entry exists in container
-         $this->assertTrue(isset($result));
+         $this->assertTrue($result);
     }
 
     /** @test */
