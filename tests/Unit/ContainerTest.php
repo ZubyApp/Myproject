@@ -5,42 +5,39 @@ declare(strict_types = 1);
 namespace Tests\Unit;
 
 use App\Container;
+use App\Exceptions\Container\ContainerException;
 use App\Services\EmailService;
 use App\Services\InvoiceService;
 use App\Services\PaymentGatewayInterface;
 use App\Services\SalesTaxService;
 use App\Services\StripePayment;
-use PharIo\Manifest\Email;
-use PhpParser\Node\Expr\Instanceof_;
-use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\TestCase;
 
 class ContainerTest extends TestCase
 {
-    public string $id = 'SalesTaxService::class';
-    
+    private Container $container;
 
-    /** @test */
-    public function check_if_id_has_binding(): void
+    public function setUp(): void
     {
-        // given that we have a container object
+        parent::setUp();
 
-        $container = new Container();
-         
-
-         //when we call the has method with arg
-         $result = $container->has($this->id);
-
-         // we assert that entry exists in container
-         $this->assertTrue($result);
+        $this->container = new Container;
     }
 
     /** @test */
-    public function check_if_class_is_set_in_container(): void
+    public function check_if_id_has_binding_in_container(): void
     {
-        $container = new Container();
+         //when a dependency is set in the container
+         $this->container->set('App\Services\PaymentGatewayInterface', 'App\Services\PaddlePayment');
+         
+         // assert that entry exists in container
+         $this->assertTrue($this->container->has('App\Services\PaymentGatewayInterface'));
+    }
 
-        $setClass = $container->set(InvoiceService::class, function(){
+    /** @test */
+    public function can_get_dependency_from_container(): void
+    {
+        $this->container->set(InvoiceService::class, function(){
             return new InvoiceService(
                 new SalesTaxService(),
                 new StripePayment(),
@@ -49,8 +46,21 @@ class ContainerTest extends TestCase
         }
     );
 
-        $this->assertTrue($setClass);
+        $sampleClass = new SalesTaxService();
 
+        $this->assertEquals($sampleClass, $this->container->get(SalesTaxService::class)
+        );
+
+    }
+
+    /** @test */
+    public function it_throws_container_exception(): void
+    {
+        $theClass = PaymentGatewayInterface::class;
+
+        $this->expectException(ContainerException::class);
+
+        $this->container->resolve($theClass);
     }
 
 }
