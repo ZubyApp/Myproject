@@ -5,34 +5,27 @@ declare(strict_types=1);
 use App\Controllers\HomeController;
 use App\App;
 use App\Router;
-use App\Config;
-use App\Container;
-use App\Controllers\TransactionController;
-use App\Model\Transaction;
-use App\Models\Transaction as ModelsTransaction;
+use App\Controllers\InvoiceController;
+use Illuminate\Container\Container;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
-
 define('STORAGE_PATH', __DIR__ . '/../storage');
-define('FILE_PATH', __DIR__ . '/../storage/');
 define('VIEW_PATH', __DIR__ . '/../views');
 
-$container = new Container();
+$container = new Container;
 $router    = new Router($container);
 
-$router 
-    ->get('/', [HomeController::class, 'index'])
-    ->get('/transactions', [TransactionController::class, 'viewTransactions'])
-    ->get('/savetransaction', [TransactionController::class, 'saveTransaction'])
-    ->post('/upload', [HomeController::class, 'saveFile']);
+$router->registerRoutesFromControllerAttributes(
+    [
+        HomeController::class,
+        InvoiceController::class,
+    ]
+);
 
 
 (new App(
     $container,
     $router,
-    ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']],
-    new Config($_ENV)
-))->run();
+    ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']]
+))->boot()->run();
