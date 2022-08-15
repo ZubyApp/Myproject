@@ -5,29 +5,52 @@ declare(strict_types=1);
 namespace App;
 
 use App\Exceptions\RouteNotFoundException;
-use App\Container;
-use App\Services\PaddlePayment;
-use App\Services\PaymentGatewayInterface;
-use App\Services\StripePayment;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
+use Dotenv\Dotenv;
+use Illuminate\Container\Container;
+use Twig\Environment;
+use Twig\Extra\Intl\IntlExtension;
+use Twig\Loader\FilesystemLoader;
 
 class App
 {   
-    private static DB $db;
+    private Config $config;
 
     public function __construct(
-        protected Container $container, 
-        protected Router $router, 
-        protected array $request, 
-        protected Config $config
-        ) {
-        static::$db = new DB($config->db ?? []);
-
-        $this->container->set(PaymentGatewayInterface::class, PaddlePayment::class);
+        protected Container $container,
+        protected ?Router $router = null, 
+        protected array $request =[],
+    ) {
     }
 
-    public static function db(): DB
+    public function boot(): static
     {
-        return static::$db;
+        $dotenv = Dotenv::createImmutable(dirname(__DIR__));
+        $dotenv->load();
+
+        $this->config = new Config($_ENV);
+
+        $twig = new Environment(
+            new FilesystemLoader(VIEW_PATH), 
+            [
+                'cache' => \STORAGE_PATH . '/cache',
+                'auto_reload' => true
+            ]
+        );
+
+        $twig->addExtension(new IntlExtension());
+
+        $this->container->singleton(Environment::class, fn () => $twig);
+        $this->container->singleton(
+            EntityManager::class,
+            fn() => EntityManager::create(
+                $this->config->db,
+                ORMSetup::createAttributeMetadataConfiguration([__DIR__ . '/Entity'])
+            )
+        );
+
+        return $this;
     }
 
     public function run()
@@ -37,7 +60,7 @@ class App
         } catch (RouteNotFoundException) {
             http_response_code(404);
 
-            echo View::make('error/404');
+            echo $this->container->get(Environment::class)('error/404.twig');
         }
     }
 }
