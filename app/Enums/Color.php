@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Enums;
 
-enum Color: string
+class Color: string
 {
     case Green = 'green';
     case Red = 'red';
