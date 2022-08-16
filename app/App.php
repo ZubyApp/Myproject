@@ -32,9 +32,9 @@ class App
         $this->config = new Config($_ENV);
 
         $twig = new Environment(
-            new FilesystemLoader(VIEW_PATH), 
+            new FilesystemLoader(\VIEW_PATH), 
             [
-                'cache' => STORAGE_PATH . '/cache',
+                'cache' => \STORAGE_PATH . '/cache',
                 'auto_reload' => true,
             ]
         );
