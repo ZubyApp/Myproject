@@ -60,7 +60,7 @@ class App
         } catch (RouteNotFoundException) {
             http_response_code(404);
 
-            echo $this->container->get(Environment::class)('error/404.twig');
+            echo $this->container->get(Environment::class)->render('error/404.twig');
         }
     }
 }
