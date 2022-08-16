@@ -34,8 +34,8 @@ class App
         $twig = new Environment(
             new FilesystemLoader(VIEW_PATH), 
             [
-                'cache' => \STORAGE_PATH . '/cache',
-                'auto_reload' => true
+                'cache' => STORAGE_PATH . '/cache',
+                'auto_reload' => true,
             ]
         );
 
