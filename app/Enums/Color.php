@@ -6,8 +6,8 @@ namespace App\Enums;
 
 class Color
 {
-    case Green = 'green';
-    case Red = 'red';
-    case Gray = 'gray';
-    case Orange = 'orange';
+    const Green = 'green';
+    const Red = 'red';
+    const Gray = 'gray';
+    const Orange = 'orange';
 }
