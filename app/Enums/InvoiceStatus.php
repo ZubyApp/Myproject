@@ -8,10 +8,10 @@ use App\Enums\Color;
 
 class InvoiceStatus
 {
-    case Pending = 0;
-    case Paid    = 1;
-    case Void    = 2;
-    case Failed  = 3;
+    const Pending = 0;
+    const Paid    = 1;
+    const Void    = 2;
+    const Failed  = 3;
 
     public function toString(): string
     {
