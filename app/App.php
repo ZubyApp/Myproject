@@ -20,7 +20,7 @@ class App
     public function __construct(
         protected Container $container,
         protected ?Router $router = null, 
-        protected array $request =[],
+        protected array $request = [],
     ) {
     }
 
