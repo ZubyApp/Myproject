@@ -23,11 +23,16 @@ $router->registerRoutesFromControllerAttributes(
     ]
 );
 
+echo '<pre>';
 var_dump($_ENV);
+echo '</pre>';
 
 (new App(
     $container,
     $router,
     ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']]
 ))->boot()->run();
+
+echo '<pre>';
 var_dump($_ENV);
+echo '</pre>';
