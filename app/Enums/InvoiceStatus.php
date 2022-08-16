@@ -6,7 +6,7 @@ namespace App\Enums;
 
 use App\Enums\Color;
 
-enum InvoiceStatus
+class InvoiceStatus
 {
     case Pending = 0;
     case Paid    = 1;
