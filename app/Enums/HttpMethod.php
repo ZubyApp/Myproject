@@ -6,8 +6,8 @@ namespace App\Enums;
 
 class HttpMethod
 {
-    case Get  = 'get';
-    case Post = 'post';
-    case Put  = 'put';
-    case Head = 'Head';
+    const Get  = 'get';
+    const Post = 'post';
+    const Put  = 'put';
+    const Head = 'Head';
 }
