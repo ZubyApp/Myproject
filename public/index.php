@@ -16,18 +16,19 @@ define('VIEW_PATH', __DIR__ . '/../views');
 $container = new Container();
 $router    = new Router($container);
 
-$router->registerRoutesFromControllerAttributes(
-    [
-        HomeController::class,
-        InvoiceController::class,
-    ]
-);
 
 (new App(
     $container,
     $router,
     ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']]
 ))->boot()->run();
+
+$router->registerRoutesFromControllerAttributes(
+    [
+        HomeController::class,
+        InvoiceController::class,
+    ]
+);
 
 echo '<pre>';
 var_dump($_ENV);
