@@ -23,6 +23,7 @@ $router->registerRoutesFromControllerAttributes(
     ]
 );
 
+var_dump($_ENV);
 
 (new App(
     $container,
