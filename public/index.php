@@ -30,3 +30,4 @@ var_dump($_ENV);
     $router,
     ['uri' => $_SERVER['REQUEST_URI'], 'method' => $_SERVER['REQUEST_METHOD']]
 ))->boot()->run();
+var_dump($_ENV);
